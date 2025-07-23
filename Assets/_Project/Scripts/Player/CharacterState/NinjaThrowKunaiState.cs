@@ -24,10 +24,10 @@ public class NinjaThrowKunaiState : CharacterStateBase
             PlayerController.EnableCanMove();
             PlayerController.EnableCanThrowKunai();
 
-            if (PlayerController.MoveDirection == 0)
+            if (PlayerController.MoveHorizontal == 0)
                 PlayerController.ChangeState(typeof(NinjaIdleState));
 
-            if (PlayerController.MoveDirection != 0)
+            if (PlayerController.MoveHorizontal != 0)
                 PlayerController.ChangeState(typeof(NinjaRunState));
         }
     }

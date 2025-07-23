@@ -9,9 +9,12 @@ public class PlayerController : MonoBehaviour
 {
     public CharacterState CharacterStateMachine { get { return stateMachine; } }
     public Animator Animator { get { return animator; } }
+    public Ladder CurrentLadder ;
     public bool IsGrounded { get; private set; }
     public bool CanMove { get; private set; }
-    public float MoveDirection { get; private set; }
+    public bool CanClimb;
+    public float MoveHorizontal { get; private set; }
+    public float MoveVertical { get; private set; }
     public bool CanAttack { get; private set; }
     public bool CanThrowKunai;//{ get; private set; }
     public float KunaiFireRate { get { return kunaiFireRate; } }
@@ -34,6 +37,7 @@ public class PlayerController : MonoBehaviour
     public int attackDamage = 10;
 
     [Header("Movement Settings")]
+    public float glidingGravity = .2f;
     [SerializeField] float moveSpeed = 3f;
     [SerializeField] float jumpForce = 5f;
     [SerializeField] LayerMask groundLayer;
@@ -73,13 +77,16 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        MoveDirection = Input.GetAxisRaw("Horizontal");
+        MoveHorizontal = Input.GetAxisRaw("Horizontal");
+        MoveVertical = Input.GetAxisRaw("Vertical");
         IsGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
         animator.SetBool("IsGrounded", IsGrounded);
 
         if (CanMove == false)
             FreezeCharacter();
+
+
 
         stateMachine.currentState.OnStateRunning();
 
@@ -121,8 +128,8 @@ public class PlayerController : MonoBehaviour
 
     public void FlipCharacter()
     {
-        if (MoveDirection != 0)
-            transform.localScale = new Vector3(MoveDirection, 1, 1);
+        if (MoveHorizontal != 0)
+            transform.localScale = new Vector3(MoveHorizontal, 1, 1);
     }
 
     public void ThrowKunai()
@@ -132,6 +139,19 @@ public class PlayerController : MonoBehaviour
             DisableCanMove();
         DisableCanThrowKunai();
         StartCoroutine(ThrowKunaiCor());
+    }
+
+    public float GetVelocityY()
+    {
+        return rb.linearVelocityY;
+    }
+
+    public void Gliding(bool reset = false)
+    {
+        if (reset)
+            animator.SetBool("IsGliding", false);
+        else
+            animator.SetBool("IsGliding", GetGlidingKey());
     }
 
     private IEnumerator ThrowKunaiCor()
@@ -146,9 +166,13 @@ public class PlayerController : MonoBehaviour
     #region State Related
     public void Move()
     {
-        rb.linearVelocity = new Vector2(MoveDirection * moveSpeed, rb.linearVelocityY);
-    }
+        rb.linearVelocity = new Vector2(MoveHorizontal * moveSpeed, rb.linearVelocityY);
 
+    }
+    public void SetGravityScale(float gravityScale)
+    {
+        rb.gravityScale = gravityScale;
+    }
     public void MeleeAttack()
     {
         DisableCanMove();
@@ -164,6 +188,7 @@ public class PlayerController : MonoBehaviour
             meleeAttackDetector.gameObject.SetActive(false);
         }
     }
+
     public void EnableCanMove()
     {
         CanMove = true;
@@ -198,6 +223,25 @@ public class PlayerController : MonoBehaviour
     {
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         animator.SetTrigger("Jump");
+    }
+
+    public void StartClimbing()
+    {
+        rb.AddForce(Vector2.up * jumpForce / 2, ForceMode2D.Impulse);
+        SetGravityScale(0);
+        animator.SetBool("IsClimbing", true);
+    }
+
+    public void Climbing()
+    {
+
+        // rb.linearVelocity = new Vector2(MoveHorizontal * moveSpeed, MoveVertical * moveSpeed);
+        rb.linearVelocity = new Vector2(rb.linearVelocityX, MoveVertical * moveSpeed);
+    }
+
+    public void StopClimbing()
+    {
+        animator.SetBool("IsClimbing", false);
     }
 
     public void Hurt()
@@ -242,6 +286,16 @@ public class PlayerController : MonoBehaviour
     public bool GetThrowKunaiKey()
     {
         return Input.GetKeyDown(KeyCode.Mouse1);
+    }
+
+    public bool GetGlidingKey()
+    {
+        return Input.GetKey(KeyCode.Space);
+    }
+
+    public bool GetClimbingKey()
+    {
+        return (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.Space)) && CanClimb;
     }
     #endregion
 

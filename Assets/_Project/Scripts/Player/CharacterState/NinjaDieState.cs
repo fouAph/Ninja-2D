@@ -1,3 +1,5 @@
+using Unity.VisualScripting;
+
 public class NinjaDieState : CharacterStateBase
 {
     public override void OnStateEnter()
@@ -14,7 +16,7 @@ public class NinjaDieState : CharacterStateBase
     {
         if (CheckCanUpdate())
         {
-            
+
         }
     }
 }

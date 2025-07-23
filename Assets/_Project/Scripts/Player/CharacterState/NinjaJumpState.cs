@@ -17,6 +17,15 @@ public class NinjaJumpState : CharacterStateBase
     {
         PlayerController.FlipCharacter();
         PlayerController.Move();
+
+        if (PlayerController.GetGlidingKey() && PlayerController.GetVelocityY() < 0)
+        {
+            PlayerController.SetGravityScale(PlayerController.glidingGravity);
+            PlayerController.Gliding();
+        }
+        else
+            PlayerController.SetGravityScale(1);
+
         if (CheckCanUpdate())
         {
             if (PlayerController.IsGrounded)

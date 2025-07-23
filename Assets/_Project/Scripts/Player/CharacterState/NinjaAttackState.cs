@@ -23,10 +23,10 @@ public class NinjaAttackState : CharacterStateBase
             PlayerController.EnableCanMove();
             PlayerController.EnableCanAttack();
 
-            if (PlayerController.MoveDirection == 0)
+            if (PlayerController.MoveHorizontal == 0)
                 PlayerController.ChangeState(typeof(NinjaIdleState));
 
-            if (PlayerController.MoveDirection != 0)
+            if (PlayerController.MoveHorizontal != 0)
                 PlayerController.ChangeState(typeof(NinjaRunState));
         }
     }
