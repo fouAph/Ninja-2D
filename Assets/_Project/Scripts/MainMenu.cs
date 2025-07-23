@@ -43,6 +43,7 @@ public class MainMenu : MonoBehaviour
 
         selectedChar = characters[charIndex];
         charImg.sprite = selectedChar.charSprite;
+        CharacterSelectHelper.Instance.SetSelectedCharacter(selectedChar);
     }
 
     public void OnCharSelectButton()

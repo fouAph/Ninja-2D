@@ -27,5 +27,10 @@ public class NinjaIdleState : CharacterStateBase
 
         if (PlayerController.GetThrowKunaiKey() && PlayerController.IsBot == false)
             PlayerController.ChangeState(typeof(NinjaThrowKunaiState));
+
+        if (PlayerController.GetVelocityY() < 0)
+        {
+            PlayerController.ChangeState(typeof(NinjaFallingState));
+        }
     }
 }

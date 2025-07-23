@@ -14,7 +14,10 @@ public class NinjaRunState : CharacterStateBase
     {
         PlayerController.FlipCharacter();
         PlayerController.Move();
-
+        if (PlayerController.GetVelocityY() < 0)
+        {
+            PlayerController.ChangeState(typeof(NinjaFallingState));
+        }
         if (PlayerController.MoveHorizontal == 0)
             PlayerController.ChangeState(typeof(NinjaIdleState));
 

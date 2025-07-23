@@ -83,6 +83,7 @@ public class PlayerController : MonoBehaviour
         MoveVertical = Input.GetAxisRaw("Vertical");
         IsGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
+        // animator.SetBool("IsFalling", GetVelocityY() < 0);
         animator.SetBool("IsGrounded", IsGrounded);
 
         if (CanMove == false)
@@ -130,6 +131,10 @@ public class PlayerController : MonoBehaviour
         GetComponent<Collider2D>().enabled = false;
 
         enabled = false;
+
+        if (IsBot == false)
+            GameManager.Instance.ShowGameOverPanel();
+
     }
 
     public void FlipCharacter()
