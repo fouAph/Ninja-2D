@@ -9,7 +9,8 @@ public class PlayerController : MonoBehaviour
 {
     public CharacterState CharacterStateMachine { get { return stateMachine; } }
     public Animator Animator { get { return animator; } }
-    public Ladder CurrentLadder ;
+    public Ladder CurrentLadder;
+    public Sprite charSprite;
     public bool IsGrounded { get; private set; }
     public bool CanMove { get; private set; }
     public bool CanClimb;
@@ -64,7 +65,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
 
         stateMachine.RegisterCharacterState(registeredState);
-        ChangeState(typeof(NinjaIdleState));
+        if (IsBot == false || stateMachine.currentState == null)
+            ChangeState(typeof(NinjaIdleState));
 
         EnableCanMove();
         EnableCanThrowKunai();
@@ -123,6 +125,10 @@ public class PlayerController : MonoBehaviour
     private void OnDieEvent()
     {
         ChangeState(typeof(NinjaDieState));
+        healthSystem.enabled = false;
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        GetComponent<Collider2D>().enabled = false;
+
         enabled = false;
     }
 

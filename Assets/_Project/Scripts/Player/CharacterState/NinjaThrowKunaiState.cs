@@ -19,16 +19,28 @@ public class NinjaThrowKunaiState : CharacterStateBase
 
     public override void OnStateRunning()
     {
-        if (CheckCanUpdate())
+        if (PlayerController.IsBot)
         {
-            PlayerController.EnableCanMove();
-            PlayerController.EnableCanThrowKunai();
+            if (CheckCanUpdate())
+            {
+                PlayerController.ThrowKunai();
+                SetDelayTimer(PlayerController.KunaiFireRate);
+            }
+        }
 
-            if (PlayerController.MoveHorizontal == 0)
-                PlayerController.ChangeState(typeof(NinjaIdleState));
+        else
+        {
+            if (CheckCanUpdate())
+            {
+                PlayerController.EnableCanMove();
+                PlayerController.EnableCanThrowKunai();
 
-            if (PlayerController.MoveHorizontal != 0)
-                PlayerController.ChangeState(typeof(NinjaRunState));
+                if (PlayerController.MoveHorizontal == 0)
+                    PlayerController.ChangeState(typeof(NinjaIdleState));
+
+                if (PlayerController.MoveHorizontal != 0)
+                    PlayerController.ChangeState(typeof(NinjaRunState));
+            }
         }
     }
 }

@@ -19,8 +19,8 @@ public class NinjaClimbingState : CharacterStateBase
             if (PlayerController.MoveHorizontal == 0 && PlayerController.IsGrounded || PlayerController.CurrentLadder == null)
                 PlayerController.ChangeState(typeof(NinjaIdleState));
 
-            else if (PlayerController.CurrentLadder == null && !PlayerController.IsGrounded && PlayerController.IsBot == false)
-                PlayerController.ChangeState(typeof(NinjaJumpState));
+            // if (PlayerController.CurrentLadder == null && !PlayerController.IsGrounded && PlayerController.IsBot == false)
+            //     PlayerController.ChangeState(typeof(NinjaJumpState));
         }
     }
 }

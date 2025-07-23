@@ -6,6 +6,7 @@ public class NinjaDieState : CharacterStateBase
     {
         PlayerController.Animator.SetTrigger("Die");
         SetDelayTimer(1);
+        PlayerController.FreezeCharacter();
     }
 
     public override void OnStateExit()

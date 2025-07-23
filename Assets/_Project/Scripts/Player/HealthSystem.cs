@@ -4,7 +4,7 @@ using UnityEngine.Events;
 public class HealthSystem : MonoBehaviour, IDamageable
 {
     [HideInInspector] public UnityEvent OnTakeDamage;
-    [HideInInspector] public UnityEvent OnDie;
+    public UnityEvent OnDie;
 
     [SerializeField] int maxHealth = 100;
 
@@ -33,7 +33,7 @@ public class HealthSystem : MonoBehaviour, IDamageable
     }
 
     public void OnDieEvent()
-    { 
+    {
     }
 }
 

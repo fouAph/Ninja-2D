@@ -26,7 +26,7 @@ public class Kunai : MonoBehaviour
 
         gameObject.SetActive(false);
     }
-
+ 
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (owner == collision.transform) return;
@@ -34,5 +34,7 @@ public class Kunai : MonoBehaviour
         {
             damageable?.TakeDamage(kunaiDamage);
         }
+
+        gameObject.SetActive(false);
     }
 }
